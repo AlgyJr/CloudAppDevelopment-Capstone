@@ -140,3 +140,4 @@ server/djangoapp/migrations/
 *.pyc
 server/djangoapp/migrations/
 
+functions/.creds-sample.json
