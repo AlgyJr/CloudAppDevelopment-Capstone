@@ -11,36 +11,22 @@ def main(param_dict):
         
     
     try:
-        posted_review = Document(
-            id=param_dict["review"]["id"],
-            name=param_dict["review"]["name"],
-            dealership=param_dict["review"]["dealership"],
-            review=param_dict["review"]["review"],
-            purchase=param_dict["review"]["purchase"],
-            purchase_date=param_dict["review"]["purchase_date"],
-            car_make=param_dict["review"]["car_make"],
-            car_model=param_dict["review"]["car_model"],
-            car_year=param_dict["review"]["car_year"]
-        )
-        
-        uuid = service.get_uuids(count=1).get_result()
-        thisUuid = uuid["uuids"][0]
-        
-        response = service.put_document(
+        response = service.post_document(
             db='reviews',
-            doc_id=thisUuid,
-            document=posted_review,
+            document=param_dict["review"],
         ).get_result()
         # result_by_filter=my_database.get_query_result(selector,raw_result=True)
         result= {
             'headers': {'Content-Type':'application/json'},
             'body': {'data':response}
         }
-        return response
+        return result
     except ApiException as ae:
         errorBody = {"error": ae.message}
         if ("reason" in ae.http_response.json()):
             errorBody["reason"] = ae.http_response.json()["reason"]
+        
+        return errorBody
     except:
         return {
             'statusCode': 500,
